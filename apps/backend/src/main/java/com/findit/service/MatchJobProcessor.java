@@ -7,7 +7,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Instant;
 import java.util.Arrays;
@@ -20,13 +19,13 @@ public class MatchJobProcessor {
     private static final Logger LOGGER = LoggerFactory.getLogger(MatchJobProcessor.class);
 
     private final MatchJobRepository jobRepository;
-    private final MatchingService matchingService;
+    private final MatchJobRunner matchJobRunner;
     private final MatchJobFailureService failureService;
 
-    public MatchJobProcessor(MatchJobRepository jobRepository, MatchingService matchingService,
+    public MatchJobProcessor(MatchJobRepository jobRepository, MatchJobRunner matchJobRunner,
                               MatchJobFailureService failureService) {
         this.jobRepository = jobRepository;
-        this.matchingService = matchingService;
+        this.matchJobRunner = matchJobRunner;
         this.failureService = failureService;
     }
 
@@ -37,25 +36,11 @@ public class MatchJobProcessor {
                 .stream().map(MatchJob::getId).collect(Collectors.toList());
         for (UUID jobId : jobIds) {
             try {
-                processOne(jobId);
+                matchJobRunner.processOne(jobId);
             } catch (RuntimeException exception) {
-                LOGGER.warn("Match job {} failed with {}", jobId, exception.getClass().getSimpleName());
+                LOGGER.warn("Match job {} failed; scheduling retry", jobId, exception);
                 failureService.recordFailure(jobId);
             }
         }
     }
-
-    @Transactional
-    public void processOne(UUID jobId) {
-        MatchJob job = jobRepository.findByIdForUpdate(jobId).orElse(null);
-        if (job == null || (job.getState() != MatchJobState.PENDING && job.getState() != MatchJobState.RETRY)
-                || job.getNextAttemptAt().isAfter(Instant.now())) return;
-        job.setState(MatchJobState.RUNNING);
-        job.setAttempts(job.getAttempts() + 1);
-        jobRepository.save(job);
-        matchingService.generateFor(job.getReport());
-        job.setState(MatchJobState.COMPLETED);
-        job.setLastErrorCode(null);
-    }
-
 }

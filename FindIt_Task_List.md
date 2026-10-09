@@ -82,7 +82,7 @@ This task list is derived from the implementation plan and organized into delive
 ## Phase 7: Hardening & QA
 
 - [ ] Run security tests and vulnerability checks (auth/authorization tests pass; no dependency vulnerability scan run)
-- [ ] Perform responsive UI validation
+- [x] Perform responsive UI validation (browser smoke-tested at a 390px viewport)
 - [ ] Check accessibility basics and keyboard support (focus styles exist; manual audit pending)
 - [ ] Cover edge cases and error states
 - [ ] Run load smoke tests and performance checks
@@ -94,8 +94,8 @@ This task list is derived from the implementation plan and organized into delive
 
 - [x] Configure environment variables and local secret handling
 - [ ] Deploy frontend, API, and database (blueprint added; hosted deployment requires account access)
-- [ ] Run migrations in a production-like hosted environment (local PostgreSQL validation pending)
-- [ ] Conduct smoke tests against deployed app (local smoke test pending)
+- [x] Run all migrations in a clean local PostgreSQL 18 database (hosted validation pending)
+- [x] Smoke-test local PostgreSQL-backed health, report search, matching jobs, notifications, and two-user recovery (hosted smoke test pending)
 - [x] Seed safe demo data in local/demo profiles
 - [x] Document forward-only migration and demo reset guidance
 - [x] Document a reproducible local demo path

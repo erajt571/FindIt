@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.findit.domain.*;
 import com.findit.repository.*;
 import com.findit.service.MatchFlowService;
+import com.findit.service.MatchJobRunner;
 import com.findit.service.MatchingService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -42,6 +43,7 @@ class ReportMatchingIntegrationTest {
     @Autowired private ModerationActionRepository moderationRepository;
     @Autowired private ReportStatusHistoryRepository statusHistoryRepository;
     @Autowired private MatchingService matchingService;
+    @Autowired private MatchJobRunner matchJobRunner;
     @Autowired private MatchFlowService matchFlowService;
     @Autowired private PasswordEncoder passwordEncoder;
 
@@ -137,6 +139,24 @@ class ReportMatchingIntegrationTest {
         matchFlowService.transition(match.getId(), MatchState.CLOSED, finder.getEmail());
         org.junit.jupiter.api.Assertions.assertEquals(ReportStatus.RESOLVED,
                 reportRepository.findById(lost.getId()).get().getStatus());
+    }
+
+    @Test
+    void persistedMatchJobsRunInsideATransaction() {
+        AppUser owner = userRepository.save(user("job-lost@example.com", "Lost owner"));
+        AppUser finder = userRepository.save(user("job-found@example.com", "Finder"));
+        Report lost = reportRepository.save(report(owner, ReportType.LOST));
+        reportRepository.save(report(finder, ReportType.FOUND));
+        MatchJob job = new MatchJob();
+        job.setReport(lost);
+        job = jobRepository.save(job);
+
+        matchJobRunner.processOne(job.getId());
+
+        MatchJob completed = jobRepository.findById(job.getId()).get();
+        org.junit.jupiter.api.Assertions.assertEquals(MatchJobState.COMPLETED, completed.getState());
+        org.junit.jupiter.api.Assertions.assertEquals(1, completed.getAttempts());
+        org.junit.jupiter.api.Assertions.assertEquals(1, matchRepository.findAllForReport(lost.getId()).size());
     }
 
     @Test

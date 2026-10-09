@@ -13,11 +13,14 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.criteria.Predicate;
+import java.time.Instant;
 import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Locale;
 import java.util.UUID;
-import java.time.Instant;
 
 @Service
 public class ReportService {
@@ -50,8 +53,33 @@ public class ReportService {
                 "itemName".equals(sort) ? "itemName" : "createdAt");
         Pageable pageable = PageRequest.of(page, size, primarySort.and(Sort.by(
                 "itemName".equals(sort) ? Sort.Direction.ASC : Sort.Direction.DESC, "id")));
-        return reportRepository.searchActive(ReportStatus.ACTIVE, type, blankToNull(category),
-                blankToNull(location), dateFrom, dateTo, blankToNull(query), pageable);
+        String normalizedCategory = blankToNull(category);
+        String normalizedLocation = blankToNull(location);
+        String normalizedQuery = blankToNull(query);
+        return reportRepository.findAll((root, criteriaQuery, builder) -> {
+            List<Predicate> predicates = new ArrayList<>();
+            predicates.add(builder.equal(root.get("status"), ReportStatus.ACTIVE));
+            if (type != null) predicates.add(builder.equal(root.get("reportType"), type));
+            if (normalizedCategory != null) {
+                predicates.add(builder.equal(builder.lower(root.<String>get("category")),
+                        normalizedCategory.toLowerCase(Locale.ROOT)));
+            }
+            if (normalizedLocation != null) {
+                predicates.add(builder.like(builder.lower(root.<String>get("locationName")),
+                        "%" + normalizedLocation.toLowerCase(Locale.ROOT) + "%"));
+            }
+            if (dateFrom != null) predicates.add(builder.greaterThanOrEqualTo(root.<Instant>get("incidentDate"), dateFrom));
+            if (dateTo != null) predicates.add(builder.lessThan(root.<Instant>get("incidentDate"), dateTo));
+            if (normalizedQuery != null) {
+                String pattern = "%" + normalizedQuery.toLowerCase(Locale.ROOT) + "%";
+                predicates.add(builder.or(
+                        builder.like(builder.lower(root.<String>get("itemName")), pattern),
+                        builder.like(builder.lower(root.<String>get("category")), pattern),
+                        builder.like(builder.lower(root.<String>get("description")), pattern),
+                        builder.like(builder.lower(root.<String>get("locationName")), pattern)));
+            }
+            return builder.and(predicates.toArray(new Predicate[0]));
+        }, pageable);
     }
 
     @Transactional(readOnly = true)
