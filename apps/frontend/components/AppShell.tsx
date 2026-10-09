@@ -2,18 +2,21 @@
 
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
+import { useState } from 'react';
 import { useAuth } from '@/components/AuthProvider';
 
 export function AppShell({ children }: { children: React.ReactNode }) {
-  const { user, loading, logout } = useAuth();
+  const { user, loading, error: authError, logout } = useAuth();
   const router = useRouter();
+  const [actionError, setActionError] = useState('');
 
   async function handleLogout() {
+    setActionError('');
     try {
       await logout();
       router.push('/');
     } catch (error) {
-      window.alert(error instanceof Error ? error.message : 'Unable to sign out.');
+      setActionError(error instanceof Error ? error.message : 'Unable to sign out.');
     }
   }
 
@@ -48,6 +51,11 @@ export function AppShell({ children }: { children: React.ReactNode }) {
           </div>
         </nav>
       </header>
+      {(authError || actionError) && <div className="mx-auto max-w-7xl px-5 pt-5">
+        <p className="rounded-lg border border-rose-500/40 bg-rose-500/10 p-3 text-sm text-rose-200" role="alert">
+          {actionError || authError}
+        </p>
+      </div>}
       <main className="mx-auto max-w-7xl px-5 py-8">{children}</main>
       <footer className="mx-auto max-w-7xl border-t border-slate-800 px-5 py-6 text-sm text-slate-500">
         FindIt campus lost &amp; found · Match suggestions are not proof of ownership.
