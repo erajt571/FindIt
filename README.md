@@ -110,7 +110,7 @@ The PostgreSQL profile uses the real PostgreSQL driver and Flyway migrations. To
 
 ## Deployment and recovery
 
-The Render blueprint provisions the API, frontend, and managed PostgreSQL database. Configure environment values and generated demo passwords in the hosting dashboard; never commit production secrets. Flyway migrations are append-only: apply new migrations forward, and use a verified database backup/restore for data recovery rather than editing an already-applied migration.
+The Render deployment serves the frontend at <https://findit-web-demo.onrender.com> and the API at <https://findit-api-demo.onrender.com>. Demo sign-in uses `admin@findit-demo.local` and `student@findit-demo.local`. Their passwords are stored as `DEMO_ADMIN_PASSWORD` and `DEMO_USER_PASSWORD` environment variables on the [Render API service](https://dashboard.render.com/web/srv-db4carvlot8c738hvpsg); retrieve them there when needed. Do not commit passwords to this repository. Flyway migrations are append-only: apply new migrations forward, and use a verified database backup/restore for data recovery rather than editing an already-applied migration.
 
 To reset a local demo, stop the application, back up any data you need, and recreate only the dedicated `findit` development database. On restart, the demo profile seeds the accounts and sample reports when the tables are empty.
 
