@@ -1,15 +1,17 @@
 'use client';
 
-import { FormEvent, useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { FormEvent, Suspense, useState } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import { AppShell } from '@/components/AppShell';
 import { useAuth } from '@/components/AuthProvider';
 import { api } from '@/lib/api';
 
-export default function NewReportPage() {
+function NewReportForm() {
   const { user, loading } = useAuth();
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const reportType = searchParams.get('type') === 'FOUND' ? 'FOUND' : 'LOST';
   const [error, setError] = useState('');
   const [saving, setSaving] = useState(false);
 
@@ -49,7 +51,7 @@ export default function NewReportPage() {
         {!loading && !user ? <div className="mt-6 rounded-xl border border-slate-800 bg-slate-900 p-5">Sign in to create a report. <Link className="text-brand-200 underline" href="/login">Sign in</Link></div> : (
           <form className="mt-7 space-y-5 rounded-2xl border border-slate-800 bg-slate-900 p-6" onSubmit={submit}>
             <label className="block text-sm font-medium text-slate-200">I am reporting
-              <select className="form-input mt-2" name="reportType" required><option value="LOST">A lost item</option><option value="FOUND">An item I found</option></select>
+              <select className="form-input mt-2" defaultValue={reportType} name="reportType" required><option value="LOST">A lost item</option><option value="FOUND">An item I found</option></select>
             </label>
             <div className="grid gap-5 sm:grid-cols-2">
               <label className="block text-sm font-medium text-slate-200">Item name<input className="form-input mt-2" maxLength={120} name="itemName" required /></label>
@@ -71,4 +73,8 @@ export default function NewReportPage() {
       </div>
     </AppShell>
   );
+}
+
+export default function NewReportPage() {
+  return <Suspense fallback={<main className="min-h-screen bg-slate-950 p-10 text-center text-slate-400">Loading report form…</main>}><NewReportForm /></Suspense>;
 }
