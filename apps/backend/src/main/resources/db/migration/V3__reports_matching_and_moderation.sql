@@ -1,0 +1,4 @@
+ALTER TABLE reports ADD COLUMN distinguishing_details TEXT;
+ALTER TABLE reports ADD COLUMN image_url VARCHAR(1000);
+ALTER TABLE match_records ADD COLUMN score_version VARCHAR(40) NOT NULL DEFAULT 'weighted-v1';
+ALTER TABLE match_records ADD COLUMN updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP;
