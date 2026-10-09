@@ -88,9 +88,14 @@ Frontend checks:
 
 ```powershell
 cd apps\frontend
+npm.cmd ci
 npm.cmd run lint
 npm.cmd run build
+npx.cmd playwright install chromium
+npm.cmd run test:e2e
 ```
+
+The browser suite starts the backend with its H2 test profile and the Next.js development server automatically. It covers account registration and sign-in, report creation and search persistence, authentication failures, and public report privacy. CI installs Chromium with its required system dependencies before running the suite.
 
 The PostgreSQL profile uses the real PostgreSQL driver and Flyway migrations. To validate changes against PostgreSQL, run the API with `SPRING_PROFILES_ACTIVE=postgres` and the database environment variables above.
 
