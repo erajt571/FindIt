@@ -67,13 +67,15 @@ The frontend is at <http://localhost:3000>, the API is at <http://localhost:8080
 
 ### Option B: Use Docker Compose
 
-Copy `.env.example` to `.env`, change the local database password, then start the stack:
+Install Docker Desktop (including Docker Compose), copy `.env.example` to `.env`, and change the local database password. From the repository root, start the stack:
 
 ```powershell
+Copy-Item .env.example .env
+# Edit .env and set POSTGRES_PASSWORD to a local password.
 docker compose up --build
 ```
 
-Compose starts PostgreSQL, the API, and the frontend. No demo accounts are seeded by default; register an account in the app. For local use, the application database password is read from `.env`; do not use the example password outside a local environment.
+Compose starts PostgreSQL, the API, and the frontend. Open <http://localhost:3000> in a browser; the API health endpoint is <http://localhost:8080/api/health>. No demo accounts are seeded by default; register an account in the app. For local use, the application database password is read from `.env`; do not use the example password outside a local environment.
 
 ## Development and validation
 

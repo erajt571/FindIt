@@ -6,9 +6,9 @@ services:
     container_name: findit-postgres
     restart: unless-stopped
     environment:
-      POSTGRES_DB: findit
-      POSTGRES_USER: findit
-      POSTGRES_PASSWORD: findit
+      POSTGRES_DB: ${POSTGRES_DB:-findit}
+      POSTGRES_USER: ${POSTGRES_USER:-findit}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-findit}
     ports:
       - "5432:5432"
     volumes:
@@ -30,7 +30,7 @@ services:
       DB_PORT: 5432
       DB_NAME: ${POSTGRES_DB:-findit}
       DB_USERNAME: ${POSTGRES_USER:-findit}
-      DB_PASSWORD: ${POSTGRES_PASSWORD:-findit_local}
+      DB_PASSWORD: ${POSTGRES_PASSWORD:-findit}
       FRONTEND_ORIGIN: http://localhost:3000
     ports:
       - "8080:8080"
