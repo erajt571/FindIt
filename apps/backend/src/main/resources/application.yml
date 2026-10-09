@@ -1,5 +1,11 @@
 server:
-  port: ${SERVER_PORT:8080}
+  port: ${SERVER_PORT:${PORT:8080}}
+  forward-headers-strategy: framework
+  servlet:
+    session:
+      cookie:
+        secure: ${SESSION_COOKIE_SECURE:false}
+        same-site: lax
 
 spring:
   datasource:
@@ -26,3 +32,12 @@ management:
   endpoint:
     health:
       show-details: never
+
+findit:
+  demo:
+    enabled: ${DEMO_MODE:false}
+  frontend-origin: ${FRONTEND_ORIGIN:http://localhost:3000}
+  match:
+    threshold: ${AI_MATCH_THRESHOLD:45}
+    date-window-days: ${AI_DATE_WINDOW_DAYS:90}
+    poll-ms: ${MATCH_JOB_POLL_MS:5000}

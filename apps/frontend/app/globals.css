@@ -26,3 +26,45 @@ body {
 a {
   text-decoration: none;
 }
+
+button,
+input,
+select,
+textarea {
+  font: inherit;
+}
+
+button {
+  cursor: pointer;
+}
+
+:focus-visible {
+  outline: 3px solid #8bb8ff;
+  outline-offset: 3px;
+}
+
+.form-input {
+  display: block;
+  width: 100%;
+  border: 1px solid #334155;
+  border-radius: 0.75rem;
+  background: #020817;
+  padding: 0.7rem 0.85rem;
+  color: #f8fafc;
+}
+
+.form-input::placeholder {
+  color: #64748b;
+}
+
+.form-input:focus {
+  border-color: #8bb8ff;
+  outline: 2px solid #8bb8ff;
+  outline-offset: 1px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}
