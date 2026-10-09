@@ -18,6 +18,43 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
+  backend:
+    build:
+      context: ./apps/backend
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    environment:
+      SPRING_PROFILES_ACTIVE: postgres
+      APP_ENV: local
+      DB_HOST: postgres
+      DB_PORT: 5432
+      DB_NAME: ${POSTGRES_DB:-findit}
+      DB_USERNAME: ${POSTGRES_USER:-findit}
+      DB_PASSWORD: ${POSTGRES_PASSWORD:-findit_local}
+      FRONTEND_ORIGIN: http://localhost:3000
+    ports:
+      - "8080:8080"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD-SHELL", "wget -q -O - http://localhost:8080/api/health >/dev/null"]
+      interval: 15s
+      timeout: 5s
+      retries: 8
+  frontend:
+    build:
+      context: ./apps/frontend
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    environment:
+      FINDIT_BACKEND_URL: http://backend:8080
+      PORT: 3000
+    ports:
+      - "3000:3000"
+    depends_on:
+      backend:
+        condition: service_healthy
 
 volumes:
   postgres-data:

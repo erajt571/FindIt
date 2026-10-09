@@ -1,0 +1,62 @@
+services:
+  - type: web
+    name: findit-api-demo
+    runtime: docker
+    plan: free
+    dockerfilePath: ./apps/backend/Dockerfile
+    dockerContext: ./apps/backend
+    healthCheckPath: /api/health
+    envVars:
+      - key: SPRING_PROFILES_ACTIVE
+        value: postgres,demo
+      - key: APP_ENV
+        value: demo
+      - key: DEMO_MODE
+        value: "true"
+      - key: DB_HOST
+        fromDatabase:
+          name: findit-demo-db
+          property: host
+      - key: DB_PORT
+        fromDatabase:
+          name: findit-demo-db
+          property: port
+      - key: DB_NAME
+        fromDatabase:
+          name: findit-demo-db
+          property: database
+      - key: DB_USERNAME
+        fromDatabase:
+          name: findit-demo-db
+          property: user
+      - key: DB_PASSWORD
+        fromDatabase:
+          name: findit-demo-db
+          property: password
+      - key: SESSION_COOKIE_SECURE
+        value: "true"
+      - key: FRONTEND_ORIGIN
+        value: https://${{findit-web-demo.host}}
+      - key: DEMO_ADMIN_EMAIL
+        value: admin@findit-demo.local
+      - key: DEMO_ADMIN_PASSWORD
+        generateValue: true
+      - key: DEMO_USER_EMAIL
+        value: student@findit-demo.local
+      - key: DEMO_USER_PASSWORD
+        generateValue: true
+  - type: web
+    name: findit-web-demo
+    runtime: docker
+    plan: free
+    dockerfilePath: ./apps/frontend/Dockerfile
+    dockerContext: ./apps/frontend
+    envVars:
+      - key: FINDIT_BACKEND_URL
+        value: https://${{findit-api-demo.host}}
+
+databases:
+  - name: findit-demo-db
+    plan: free
+    databaseName: findit
+    user: findit

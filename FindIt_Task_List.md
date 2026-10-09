@@ -26,80 +26,80 @@ This task list is derived from the implementation plan and organized into delive
 
 ## Phase 2: Identity & data model
 
-- [ ] Implement authentication flow
-- [ ] Expose current-user profile endpoint
-- [ ] Define user roles and authorization rules
-- [ ] Create database schema and migrations
-- [ ] Add seed data for development and testing
-- [ ] Enforce ownership and access policies
-- [ ] Define API DTOs for user and report data
-- [ ] Validate auth and DB constraints with automated tests
+- [x] Implement authentication flow
+- [x] Expose current-user profile endpoint
+- [x] Define user roles and authorization rules
+- [x] Create database schema and migrations
+- [x] Add seed data for development and testing
+- [x] Enforce ownership and access policies
+- [x] Define API DTOs for user and report data
+- [x] Validate auth and DB constraints with automated tests
 
 ## Phase 3: Report lifecycle
 
-- [ ] Implement report create/detail/edit/status APIs
-- [ ] Add validation rules for report lifecycle transitions
-- [ ] Enforce owner-based access checks
-- [ ] Build browse/search/filter/pagination APIs
-- [ ] Support image upload if prioritized as P1
-- [ ] Build report management UI screens
-- [ ] Add report form and detail views
-- [ ] Ensure refresh preserves user state and filters
-- [ ] Verify end-user can create and manage reports
+- [x] Implement report create/detail/edit/status APIs
+- [x] Add validation rules for report lifecycle transitions
+- [x] Enforce owner-based access checks
+- [x] Build browse/search/filter/pagination APIs
+- [ ] Add an image-upload pipeline (P1; not implemented)
+- [x] Build report management UI screens
+- [x] Add report form and detail views
+- [x] Ensure refresh preserves user state and filters
+- [x] Verify end-user can create and manage reports
 
 ## Phase 4: Matching engine
 
-- [ ] Build candidate query logic for matching
-- [ ] Integrate embedding provider adapter
-- [ ] Define weighted scoring and thresholds
-- [ ] Persist match results and explanations
-- [ ] Add deduplication logic for repeated job runs
-- [ ] Implement retry and failure handling for AI matching
-- [ ] Validate ranking quality using deterministic tests
-- [ ] Confirm AI failure does not block report creation
+- [x] Build candidate query logic for matching
+- [ ] Integrate an external embedding provider (local lexical provider is implemented)
+- [x] Define weighted scoring and thresholds
+- [x] Persist match results and explanations
+- [x] Add deduplication logic for repeated job runs
+- [x] Implement retry and failure handling for matching jobs
+- [x] Validate ranking quality using deterministic tests
+- [x] Confirm matching failure does not block report creation
 
 ## Phase 5: Match/recovery flow
 
-- [ ] Build match listing and detail views
-- [ ] Add feedback mechanism for match quality
-- [ ] Implement verification request flow
-- [ ] Support report and match state transitions
-- [ ] Generate user notifications
-- [ ] Add read/unread state handling
-- [ ] Verify two-user end-to-end workflow
-- [ ] Confirm participant-only updates and role boundaries
+- [x] Build match listing and detail views
+- [x] Add feedback mechanism for match quality
+- [x] Implement verification request flow
+- [x] Support report and match state transitions
+- [x] Generate user notifications
+- [x] Add read/unread state handling
+- [x] Verify two-user end-to-end workflow
+- [x] Confirm participant-only updates and role boundaries
 
 ## Phase 6: Dashboard & moderation
 
-- [ ] Build dashboard metrics view
-- [ ] Add My Reports and notifications screens
-- [ ] Create minimal admin moderation queue
-- [ ] Support remove/suspend actions with reason tracking
-- [ ] Add audit logging for moderation activity
-- [ ] Validate role-based access to moderated data
-- [ ] Confirm counts and summaries are accurate
+- [x] Build dashboard metrics view
+- [x] Add My Reports and notifications screens
+- [x] Create minimal admin moderation queue
+- [x] Support remove/suspend actions with reason tracking
+- [x] Add audit logging for moderation activity
+- [x] Validate role-based access to moderated data
+- [x] Confirm counts and summaries are accurate
 
 ## Phase 7: Hardening & QA
 
-- [ ] Run security tests and vulnerability checks
+- [ ] Run security tests and vulnerability checks (auth/authorization tests pass; no dependency vulnerability scan run)
 - [ ] Perform responsive UI validation
-- [ ] Check accessibility basics and keyboard support
+- [ ] Check accessibility basics and keyboard support (focus styles exist; manual audit pending)
 - [ ] Cover edge cases and error states
 - [ ] Run load smoke tests and performance checks
-- [ ] Validate backup/migration procedures
+- [ ] Validate backup/restore procedures
 - [ ] Review dependencies and license risk
 - [ ] Complete release checklist and resolve critical/high issues
 
 ## Phase 8: Deploy & demo
 
-- [ ] Configure secrets and environment variables
-- [ ] Deploy frontend, API, and database
-- [ ] Run migrations in production-like environment
-- [ ] Conduct smoke tests against deployed app
-- [ ] Seed safe demo data
-- [ ] Document rollback and demo reset process
-- [ ] Verify reproducible demo path
-- [ ] Share production-like URL for stakeholder validation
+- [x] Configure environment variables and local secret handling
+- [ ] Deploy frontend, API, and database (blueprint added; hosted deployment requires account access)
+- [ ] Run migrations in a production-like hosted environment (local PostgreSQL validation pending)
+- [ ] Conduct smoke tests against deployed app (local smoke test pending)
+- [x] Seed safe demo data in local/demo profiles
+- [x] Document forward-only migration and demo reset guidance
+- [x] Document a reproducible local demo path
+- [ ] Share production-like URL for stakeholder validation (no hosted URL available)
 
 ## Ticket backlog
 
@@ -133,18 +133,18 @@ This task list is derived from the implementation plan and organized into delive
 
 ## Ready-to-start task snapshot
 
-- [ ] INF-001: Repository and CI setup
-- [ ] INF-002: Database and migration setup
-- [ ] INF-003: Authentication and current-user API
-- [ ] INF-004: Report CRUD and statuses
-- [ ] INF-005: Search and browse API
-- [ ] INF-006: Frontend shell and routing
-- [ ] INF-007: Report UI screens
-- [ ] INF-009: Matching service and deterministic tests
-- [ ] INF-010: Embedding provider adapter
-- [ ] INF-011: Match persistence and deduplication
-- [ ] INF-012: Verification flow and feedback
-- [ ] INF-013: Notifications
-- [ ] INF-015: Admin moderation
-- [ ] INF-016: Test automation
-- [ ] INF-017: Deployment and rollback documentation
+- [x] INF-001: Repository and CI setup
+- [x] INF-002: Database and migration setup
+- [x] INF-003: Authentication and current-user API
+- [x] INF-004: Report CRUD and statuses
+- [x] INF-005: Search and browse API
+- [x] INF-006: Frontend shell and routing
+- [x] INF-007: Report UI screens
+- [x] INF-009: Matching service and deterministic tests (local lexical provider; external embeddings pending)
+- [ ] INF-010: External embedding provider integration
+- [x] INF-011: Match persistence and deduplication
+- [x] INF-012: Verification flow and feedback
+- [x] INF-013: Notifications
+- [x] INF-015: Admin moderation
+- [x] INF-016: API integration journey tests
+- [x] INF-017: Deployment blueprint and local setup/rollback documentation (hosted rollout pending)
