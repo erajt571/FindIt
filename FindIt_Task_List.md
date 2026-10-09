@@ -4,25 +4,25 @@ This task list is derived from the implementation plan and organized into delive
 
 ## Phase 0: Kickoff & decisions
 
-- [ ] Confirm MVP scope and product definition
-- [ ] Decide auth approach and user roles
-- [ ] Finalize public/private listing policy
-- [ ] Define location taxonomy and data constraints
-- [ ] Lock match threshold and date window
-- [ ] Choose storage provider and hosting model
-- [ ] Confirm repo conventions and branch strategy
-- [ ] Approve decision log and resolve architecture blockers
+- [x] Confirm MVP scope and product definition
+- [x] Decide auth approach and user roles
+- [x] Finalize public/private listing policy
+- [x] Define location taxonomy and data constraints
+- [x] Lock match threshold and date window
+- [x] Choose storage provider and hosting model
+- [x] Confirm repo conventions and branch strategy
+- [x] Approve decision log and resolve architecture blockers
 
 ## Phase 1: Foundation
 
-- [ ] Set up repository structure and code conventions
-- [ ] Create environment templates and secrets handling
-- [ ] Configure CI pipeline for lint, test, and build
-- [ ] Initialize application skeletons for backend and frontend
-- [ ] Connect application to database and migrations
-- [ ] Add health check endpoint and baseline monitoring
-- [ ] Define consistent API error response format
-- [ ] Ensure local build works from a clean checkout
+- [x] Set up repository structure and code conventions
+- [x] Create environment templates and secrets handling
+- [x] Configure CI pipeline for lint, test, and build
+- [x] Initialize application skeletons for backend and frontend
+- [x] Connect application to database and migrations
+- [x] Add health check endpoint and baseline monitoring
+- [x] Define consistent API error response format
+- [x] Ensure local build works from a clean checkout
 
 ## Phase 2: Identity & data model
 

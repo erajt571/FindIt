@@ -1,0 +1,33 @@
+# Node / Next.js
+node_modules/
+.next/
+out/
+*.tsbuildinfo
+npm-debug.log*
+
+# Java / Maven / Gradle
+**/target/
+**/.gradle/
+**/build/
+**/bin/
+*.class
+*.jar
+
+# Environment files
+.env
+.env.*
+!.env.example
+!.env.backend.example
+!.env.frontend.example
+
+# OS/editor junk
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# Docker volumes
+postgres-data/
+
+# Logs
+*.log

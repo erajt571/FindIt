@@ -1,0 +1,35 @@
+CREATE TABLE IF NOT EXISTS users (
+    id UUID PRIMARY KEY,
+    display_name VARCHAR(120) NOT NULL,
+    email VARCHAR(255) NOT NULL UNIQUE,
+    password_hash VARCHAR(255),
+    role VARCHAR(20) NOT NULL DEFAULT 'USER',
+    account_status VARCHAR(20) NOT NULL DEFAULT 'ACTIVE',
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS reports (
+    id UUID PRIMARY KEY,
+    owner_id UUID NOT NULL REFERENCES users(id),
+    report_type VARCHAR(20) NOT NULL CHECK (report_type IN ('LOST', 'FOUND')),
+    item_name VARCHAR(120) NOT NULL,
+    category VARCHAR(80) NOT NULL,
+    description TEXT NOT NULL,
+    location_name VARCHAR(120) NOT NULL,
+    incident_date TIMESTAMP,
+    status VARCHAR(30) NOT NULL DEFAULT 'ACTIVE',
+    notes TEXT,
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS match_records (
+    id UUID PRIMARY KEY,
+    report_id UUID NOT NULL REFERENCES reports(id),
+    candidate_report_id UUID NOT NULL REFERENCES reports(id),
+    score DECIMAL(5,2) NOT NULL,
+    explanation TEXT,
+    state VARCHAR(30) NOT NULL DEFAULT 'SUGGESTED',
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
